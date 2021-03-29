@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
+        crossorigin="anonymous"></script>
+    <title>Utilisateur</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="/"><i class="fas fa-home mx-3"></i>Accueil</a>
+        </div>
+    </nav>
+
+    <div class="mx-5 my-3 px-5">
+        <h1 class="">
+            <%= title %>
+        </h1>
+        <form action='<%=action %>' method="POST" class="row border rounded p-2">
+                
+                    <div class="d-none">
+                        <input type="text" name="id" value=<%=id %>>
+                    </div>               
+
+                    <div class="col-4">
+                        <label for="inEmail" class="form-label">E-mail</label>
+                        <input type="text" class="form-control" id="inEmail" name="email" required value=<%=email %>>
+                    </div>
+                    <div class="col-4">
+                        <label for="inNom" class="form-label">Nom</label>
+                        <input type="text" class="form-control" id="inNom" name="username" required value=<%=username %>>
+                    </div>
+
+
+                    <div class="col-4">
+                        <label for="inPassword" class="form-label">Mot de passe</label>
+                        <%
+                        let hiddenClass=''
+                            if(!id){
+                                hiddenClass='d-none';
+                            } 
+                        %>
+
+                        <div class="form-check form-switch form-check-inline mx-2 <%=hiddenClass%>">
+                            <label class="form-check-label" for="chkUpdatePassword">Mettre à jour</label>
+                            <input class="form-check-input" type="checkbox" id="chkUpdatePassword" name="updatePassword" value="true" onchange="onUpdatePasseword(this)">                            
+                        </div>
+                        <input type="password" class="form-control" id="inPassword" name="password" value=<%=password %>>
+                        <div class="d-none">
+                            <input type="text" id="inPasswordOriginal" name="passwordOriginal" value=<%=password %>>
+                        </div>
+                    </div>
+                        <%
+                        let date=new Date(birthday);
+                        let day = date.getDate();
+                        day = day < 10 ? "0" + day : day; 
+                                    
+                        let month = date.getMonth() + 1;
+                        month = month < 10 ? "0" + month : month;
+                                    
+                        const year = date.getFullYear();
+                                    
+                        const formattedDate =  year + "-" + month + "-" + day;
+                        %>
+                   
+                    <div class="col-3">
+                        <label for="inbirthday" class="form-label">Date de naissance</label>
+                        <input type="date" class="form-control" name="birthday" id="inbirthday" value='<%= formattedDate %>'>
+                    </div>
+                    <div class="col-3">
+                        <label for="inlocale" class="form-label">Pays</label>
+                        <input type="text" class="form-control" name="locale" id="inlocale" value= <%= locale %>>
+                    </div>
+                    <div class="col-3 pt-4 ">
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" id="ingenderf" value="f" name="gender" <%= gender=='f' ? 'checked' : '' %> />
+                            <label class="form-check-label" for="inlineCheckbox1">Femme</label>
+                        </div>
+
+                        <div class="form-check ">
+                            <input class="form-check-input" type="radio" id="ingenderm" value="m" name="gender" <%= gender=='m' ? 'checked' : '' %> />
+                            <label class="form-check-label" for="inlineCheckbox2">Homme</label>
+                        </div>
+                    </div>
+                    <div class="col-3 _pt-4 ">
+                        <label for="inlocale" class="form-label">Roles</label>
+                        <div class="form-check ">
+                            <input class="form-check-input" type="checkbox" id="inrolesU" value="ROLE_USER" name="roles[]" <%= roles.includes('ROLE_USER') ? 'checked' : '' %> />
+                            <label class="form-check-label" for="inrolesU">Utilisateur</label>
+                        </div>
+                        <div class="form-check ">
+                            <input class="form-check-input" type="checkbox" id="inrolesAS" value="ROLE_SUPER_ADMIN" name="roles[]" <%= roles.includes('ROLE_SUPER_ADMIN') ? 'checked' : '' %> />
+                            <label class="form-check-label" for="inrolesAS">Administrateur Sup.</label>
+                        </div>
+
+                        <div class="form-check ">
+                            <input class="form-check-input" type="checkbox" id="inrolesA" value="ROLE_RP_APP" name="roles[]" <%= roles.includes('ROLE_RP_APP') ? 'checked' : '' %> />
+                            <label class="form-check-label" for="inrolesA">Administrateur</label>
+                        </div>
+                    </div>
+                    <div >
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="true"  id="inisActive" name="isActive" <%= isActive ? 'checked' : '' %>>
+                            <label class="form-check-label" for="inisActive">
+                                Actif
+                            </label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="checkbox" value="true" id="inisVerified" name="isVerified" <%= isVerified ? 'checked' : '' %>>
+                            <label class="form-check-label" for="inisVerified">
+                                Vérifié
+                            </label>
+                        </div>
+                    </div>
+                    <% if(!addTransactions){ %>
+                    <div class="col-12 mt-3">
+                        <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    </div>
+                    <% } %>
+                    <small class="text-danger">
+                        <%= msgErreur %>
+                    </small>
+        </form>
+    </div>
+
+
+    <div style="margin-bottom: 40px;">
+        <div class="mx-5 my-1 px-5">
+            <% if (transactions?.length > 0 || addTransactions) { %>
+                <div class="d-flex align-items-center">
+                    <h3 class=""> Transactions </h3>
+                    <% if(addTransactions){ %>
+
+                        <a class="btn btn-sm btn-primary py-0 px-1  mx-2" href="/user/goto-rewards?id=<%=id %>">Acceder à Rewards</a>
+                        <% if (link) { %>
+                        <a class="mx-2" href="<%=link %>" target="_blank" onclick="onClickGotoRewards(event,this)">Cliquez ici pour vous connecter </a>
+                        <% } %>
+                    <% } %>
+                </div>           
+            <% } %>
+            <% if (transactions?.length > 0) { %>
+            <table class="table">
+            <thead>
+                <tr>
+                <th scope="col">Action</th>
+                <th scope="col">type</th>
+                <th scope="col">Nombre de points</th>
+                <th scope="col">Devise</th>
+                <th scope="col">Coordonnées</th> 
+                <th scope="col">Date</th>                 
+                <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <%transactions.forEach((tr)=> {%>
+                <tr>
+                    
+                    <td class="fw-bold"><%= tr.action %></td>
+                    <td><%= tr.type %></td>
+                    <td data-id=<%= tr._id %> data-name='amount'  ondblclick="startUpdateTd(this,<%=addTransactions %>)" onblur="endUpdateTd(this)"><%= tr.amount %></td>                
+                    <td data-id=<%= tr._id %> data-name='currency'  ondblclick="startUpdateTd(this,<%=addTransactions %>)" onblur="endUpdateTd(this)"><%= tr.currency %></td>
+                    <td>
+                        <div><%= tr?.location?.coordinates?.join(', ') %></div>
+                        <div><%= tr?.location?.info %> </div>                    
+                    </td>
+                    <%
+                    let dateCr=new Date(tr.createdAt);
+                    const formattedCreatedAt =  dateCr.toLocaleDateString() + ' ' + dateCr.toLocaleTimeString();
+                    let dateUp;
+                    let formattedUpdatedAt =''
+                    if(tr.updatedAt){
+                        dateUp=new Date(tr.updatedAt);
+                        formattedUpdatedAt =  dateUp.toLocaleDateString() + ' ' + dateUp.toLocaleTimeString();
+                    }
+                    %>
+
+                    <td>
+                        <div><%= formattedCreatedAt  %></div>
+                        <div><%= formattedUpdatedAt %></div>
+                    </td>
+                    <td>
+                        <% if(addTransactions){ %>
+                        <div class="d-flex"> 
+                            <a class="btn btn-danger mx-1" href="/user/delete-transaction?id=<%= tr._id %>">Supprimer</a>
+                        </div>
+                        <% } %> 
+                    </td>
+                </tr> 
+                <%});%>       
+            </tbody>
+            </table>
+            <% } %>
+
+            <% if(addTransactions){ %>
+
+            <form action='/user/create-transaction' method="POST" class="row border rounded py-2">
+                
+
+                <div class="d-none">
+                    <input type="text" name="userId" value=<%=id %>>
+                </div>               
+
+                <div class="col-4">
+                    <label for="inaction" class="form-label">action</label>                    
+                    <select class="form-select" name="action">
+                        <option selected value="GIVER.GIVE">GIVER.GIVE</option>
+                        <option value="GIVER.SPOT">GIVER.SPOT</option>
+                        <option value="TAKER.SEARCH">TAKER.SEARCH</option>  
+                        <option value="GIVER.MATCH">GIVER.MATCH</option>
+                        <option value="TAKER.PARKED">TAKER.PARKED</option>                        
+                        <option value="USER.ORDER">USER.ORDER</option> 
+                    </select>                   
+                </div>
+                               
+                <div class="col-2">
+                    <label for="inamount" class="form-label">Nombre de points</label>
+                    <input type="number" class="form-control" name="amount" id="inamount" >
+                </div>
+                <div class="col-2">
+                    <label for="incurrency" class="form-label">currency</label>                  
+
+                    <select class="form-select" name="currency">
+                        <option selected value="EUR">EUR</option>
+                        <option value="XRP">XRP</option>
+                        <option value="RP">RP</option>                        
+                    </select>
+                </div> 
+                <div class="col-2">
+                    <label for="inamount" class="form-label">Localisation</label>
+                    <button type="button" class="btn btn-sm btn-outline-primary py-0 px-1" onclick="getGeo()"><i class="fas fa-location-arrow"></i></button>
+                    <div class="d-flex">
+                        <input type="text" class="form-control " name="coordinates[]" id="location_lat" >
+                        <input type="text" class="form-control mx-1" name="coordinates[]" id="location_long" >
+                    </div>
+                </div>
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                </div>
+                                
+            </form>
+            <% } %>
+        </div>
+    </div>
+
+    <script>
+        function getGeo(){
+            navigator.geolocation.getCurrentPosition(successGeo, errorGeo); 
+        }
+        function successGeo(pos) {
+            var data = pos.coords;            
+            const inputLong=document.getElementById("location_long");
+            const inputLat=document.getElementById("location_lat");
+            inputLong.value = data.longitude;
+            inputLat.value=data.latitude;         
+        }
+            
+        function errorGeo(err) {
+            console.warn(`ERREUR (${err.code}): ${err.message}`);
+        }
+
+        function startUpdateTd(item, allow) {  
+            if(allow) {
+                item.contentEditable = "true";
+                item.focus();
+            }
+        }
+
+        async function endUpdateTd(item) {
+           
+            item.contentEditable = "false";            
+            try {
+                let postData={
+                    id:item?.dataset.id,
+                    name:item?.dataset.name,
+                    value:item.textContent,
+                };
+                const url = '/user/update-transaction';
+                const options = {
+                    method: "POST",
+                    headers: {                       
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(postData),
+                };               
+
+                const response = await fetch(url, options);
+                const data = await response.json();
+            } catch (error) {
+                console.log(" endUpdateTd : " + JSON.stringify(error));
+            }            
+        }
+        function onUpdatePasseword(chk){
+            if(chk.checked){
+                document.getElementById("inPassword").value="";
+            }else {
+                document.getElementById("inPassword").value= document.getElementById("inPasswordOriginal").value
+            }
+        }
+        function onClickGotoRewards(e,ctrl){
+            const queryString = window.location.search;
+            const urlParams = new URLSearchParams(queryString);
+            const id = urlParams.get('id')
+            e.preventDefault();
+            window.open( ctrl.href, '_blank' );
+            location.href = "/user/view?id=" + id;
+        }
+    </script>
+</body>
+
+</html>
